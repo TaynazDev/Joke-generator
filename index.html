@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Family-Friendly Joke Generator</title>
+    <meta name="description" content="A safe, family-friendly joke generator with favorites, history, and kid mode." />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1 aria-label="Family Friendly Joke Generator">Family-Friendly Joke Generator</h1>
+      <div class="toggles">
+        <label class="switch" aria-label="Toggle Kid Friendly Mode">
+          <input type="checkbox" id="kidModeToggle" />
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label" id="kidModeLabel">Kid Mode: Off</span>
+      </div>
+    </header>
+
+    <main class="container" role="main">
+      <section class="joke-card" aria-live="polite" aria-atomic="true">
+        <div id="jokeText" class="joke-text">Click "New Joke" to start!</div>
+      </section>
+
+      <div class="actions">
+        <button id="newJokeBtn" class="btn primary" aria-label="Get a new joke">New Joke</button>
+        <button id="favoriteBtn" class="btn" aria-label="Add or remove favorite">♡ Favorite</button>
+        <button id="shareBtn" class="btn" aria-label="Share this joke">Share</button>
+        <button id="copyBtn" class="btn" aria-label="Copy this joke">Copy</button>
+        <button id="historyBtn" class="btn" aria-label="View joke history">History</button>
+        <button id="favoritesBtn" class="btn" aria-label="View favorites">Favorites</button>
+      </div>
+
+      <p class="hint">Tip: Use Kid Mode to keep jokes extra gentle.</p>
+    </main>
+
+    <dialog id="historyDialog" class="dialog">
+      <header><h2>🎭 Joke History</h2></header>
+      <div id="historyList" class="list"></div>
+      <div class="dialog-actions">
+        <button id="clearHistoryBtn" class="btn danger">Clear History</button>
+        <button id="closeHistoryBtn" class="btn">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="favoritesDialog" class="dialog">
+      <header><h2>⭐ Favorites</h2></header>
+      <div id="favoritesList" class="list"></div>
+      <div class="dialog-actions">
+        <button id="clearFavoritesBtn" class="btn danger">Clear Favorites</button>
+        <button id="closeFavoritesBtn" class="btn">Close</button>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+  </html>
