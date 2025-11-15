@@ -47,7 +47,13 @@ Project Structure
 Changelog
 ---------
 
-### November 15, 2025
+### November 15, 2025 - Evening Update
+- **Reveal Answer Feature**: Added purple/pink gradient "Reveal Answer" button that shows punchlines with smooth slide-down animation
+- **Joke Structure**: Split jokes into setup (question) and punchline (answer) format for interactive reveal
+- **Bug Fixes**: Fixed AudioContext initialization to work with browser autoplay policies, fixed joke visibility issues with CSS overflow and text color
+- **Enhanced Logging**: Added console debugging for development
+
+### November 15, 2025 - Initial Release
 - **Visual Enhancements**: Added animated gradient background, rainbow shimmer title, glowing rotating borders on joke card, bounce-in animations for new jokes
 - **Interactive Effects**: Confetti celebration when favoriting (150 particles), sound effects using Web Audio API
 - **Sound Effects**: Pleasant "boop" for new jokes, loud airhorn blast for favorites, quick "blip" for copying

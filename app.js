@@ -1,51 +1,64 @@
 (function(){
   // Sound effects (using Web Audio API for beeps and boops)
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let audioCtx = null;
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx;
+  }
+  
   function playSound(type) {
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+    try {
+      const ctx = getAudioContext();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
     
-    switch(type) {
-      case 'newJoke':
-        oscillator.frequency.value = 440;
-        oscillator.type = 'sine';
-        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        oscillator.start(audioCtx.currentTime);
-        oscillator.stop(audioCtx.currentTime + 0.3);
-        break;
-      case 'favorite':
-        // Airhorn sound - loud blast with quick sweep down
-        oscillator.frequency.value = 400;
-        oscillator.type = 'sawtooth';
-        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
-        oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.8);
-        oscillator.start(audioCtx.currentTime);
-        oscillator.stop(audioCtx.currentTime + 0.8);
-        // Add second oscillator for richer airhorn effect
-        const osc2 = audioCtx.createOscillator();
-        const gain2 = audioCtx.createGain();
-        osc2.connect(gain2);
-        gain2.connect(audioCtx.destination);
-        osc2.frequency.value = 600;
-        osc2.type = 'sawtooth';
-        gain2.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
-        osc2.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.8);
-        osc2.start(audioCtx.currentTime);
-        osc2.stop(audioCtx.currentTime + 0.8);
-        break;
-      case 'copy':
-        oscillator.frequency.value = 600;
-        oscillator.type = 'square';
-        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-        oscillator.start(audioCtx.currentTime);
-        oscillator.stop(audioCtx.currentTime + 0.15);
-        break;
+      switch(type) {
+        case 'newJoke':
+          oscillator.frequency.value = 440;
+          oscillator.type = 'sine';
+          gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.3);
+          break;
+        case 'favorite':
+          // Airhorn sound - loud blast with quick sweep down
+          oscillator.frequency.value = 400;
+          oscillator.type = 'sawtooth';
+          gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+          oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.8);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.8);
+          // Add second oscillator for richer airhorn effect
+          const osc2 = ctx.createOscillator();
+          const gain2 = ctx.createGain();
+          osc2.connect(gain2);
+          gain2.connect(ctx.destination);
+          osc2.frequency.value = 600;
+          osc2.type = 'sawtooth';
+          gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+          osc2.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.8);
+          osc2.start(ctx.currentTime);
+          osc2.stop(ctx.currentTime + 0.8);
+          break;
+        case 'copy':
+          oscillator.frequency.value = 600;
+          oscillator.type = 'square';
+          gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.15);
+          break;
+      }
+    } catch(e) {
+      // Silently fail if audio context not available
+      console.log('Audio context error:', e);
     }
   }
 
@@ -101,24 +114,26 @@
   }
 
   const jokes = [
-    { id: 'j1', text: "Why did the teddy bear say no to dessert? Because she was stuffed.", kidSafe: true, tags: ['animals'] },
-    { id: 'j2', text: "What do you call cheese that isn't yours? Nacho cheese.", kidSafe: true, tags: ['food'] },
-    { id: 'j3', text: "Why did the student eat his homework? Because the teacher said it was a piece of cake!", kidSafe: true, tags: ['school','food'] },
-    { id: 'j4', text: "How does a penguin build its house? Igloos it together.", kidSafe: true, tags: ['animals'] },
-    { id: 'j5', text: "Why did the scarecrow win an award? Because he was outstanding in his field.", kidSafe: true, tags: ['farm'] },
-    { id: 'j6', text: "I told my computer I needed a break, and it said 'No problem — I'll go to sleep.'", kidSafe: true, tags: ['tech'] },
-    { id: 'j7', text: "Why don’t eggs tell jokes? They’d crack each other up.", kidSafe: true, tags: ['food'] },
-    { id: 'j8', text: "What do you call a boomerang that won’t come back? A stick.", kidSafe: true, tags: ['random'] },
-    { id: 'j9', text: "Why did the bicycle fall over? It was two-tired.", kidSafe: true, tags: ['vehicles'] },
-    { id: 'j10', text: "Why did the math book look sad? It had too many problems.", kidSafe: true, tags: ['school'] },
-    { id: 'j11', text: "What do you call a sleeping bull? A bulldozer.", kidSafe: true, tags: ['animals'] },
-    { id: 'j12', text: "What do you call a bear with no teeth? A gummy bear!", kidSafe: true, tags: ['animals','food'] },
+    { id: 'j1', setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was stuffed.", kidSafe: true, tags: ['animals'] },
+    { id: 'j2', setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese.", kidSafe: true, tags: ['food'] },
+    { id: 'j3', setup: "Why did the student eat his homework?", punchline: "Because the teacher said it was a piece of cake!", kidSafe: true, tags: ['school','food'] },
+    { id: 'j4', setup: "How does a penguin build its house?", punchline: "Igloos it together.", kidSafe: true, tags: ['animals'] },
+    { id: 'j5', setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field.", kidSafe: true, tags: ['farm'] },
+    { id: 'j6', setup: "I told my computer I needed a break.", punchline: "It said 'No problem — I'll go to sleep.'", kidSafe: true, tags: ['tech'] },
+    { id: 'j7', setup: "Why don't eggs tell jokes?", punchline: "They'd crack each other up.", kidSafe: true, tags: ['food'] },
+    { id: 'j8', setup: "What do you call a boomerang that won't come back?", punchline: "A stick.", kidSafe: true, tags: ['random'] },
+    { id: 'j9', setup: "Why did the bicycle fall over?", punchline: "It was two-tired.", kidSafe: true, tags: ['vehicles'] },
+    { id: 'j10', setup: "Why did the math book look sad?", punchline: "It had too many problems.", kidSafe: true, tags: ['school'] },
+    { id: 'j11', setup: "What do you call a sleeping bull?", punchline: "A bulldozer.", kidSafe: true, tags: ['animals'] },
+    { id: 'j12', setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!", kidSafe: true, tags: ['animals','food'] },
   ];
 
   const els = {
     jokeCard: document.querySelector('.joke-card'),
     jokeText: document.getElementById('jokeText'),
+    jokeAnswer: document.getElementById('jokeAnswer'),
     newJokeBtn: document.getElementById('newJokeBtn'),
+    revealBtn: document.getElementById('revealBtn'),
     favoriteBtn: document.getElementById('favoriteBtn'),
     shareBtn: document.getElementById('shareBtn'),
     copyBtn: document.getElementById('copyBtn'),
@@ -145,6 +160,7 @@
 
   let state = {
     current: null,
+    revealed: false,
     kidMode: !!storage.get('kidMode', false),
     history: storage.get('jokeHistory', []),
     favorites: storage.get('jokeFavorites', []),
@@ -172,11 +188,19 @@
     els.favoriteBtn.setAttribute('aria-pressed', String(on));
   }
   function showJoke(j){
+    console.log('showJoke called with:', j);
     state.current = j;
+    state.revealed = false;
     els.jokeCard.classList.remove('new-joke');
     void els.jokeCard.offsetWidth; // Force reflow
     els.jokeCard.classList.add('new-joke');
-    els.jokeText.textContent = j.text;
+    els.jokeText.textContent = j.setup;
+    els.jokeAnswer.textContent = j.punchline;
+    console.log('Setup text set to:', els.jokeText.textContent);
+    console.log('jokeText element:', els.jokeText);
+    els.jokeAnswer.classList.remove('revealed');
+    els.revealBtn.textContent = '🎭 Reveal Answer';
+    els.revealBtn.disabled = false;
     // add to history (dedupe consecutive)
     if(!state.history.length || state.history[state.history.length-1] !== j.id){
       state.history.push(j.id);
@@ -186,6 +210,15 @@
     }
     updateFavoriteBtn();
   }
+  function revealAnswer(){
+    if(state.revealed || !state.current) return;
+    state.revealed = true;
+    els.jokeAnswer.classList.add('revealed');
+    els.revealBtn.textContent = '✓ Revealed';
+    els.revealBtn.disabled = true;
+    playSound('copy'); // Use copy sound for reveal
+  }
+
   function newJoke(){
     playSound('newJoke');
     const pool = getPool();
@@ -211,7 +244,7 @@
     ids.slice().reverse().forEach(id=>{
       const j = idToJoke(id); if(!j) return;
       const row = document.createElement('div'); row.className='item';
-      const text = document.createElement('div'); text.className='text'; text.textContent=j.text;
+      const text = document.createElement('div'); text.className='text'; text.textContent=j.setup + ' ' + j.punchline;
       const actions = document.createElement('div'); actions.className='actions-row';
       const viewBtn = document.createElement('button'); viewBtn.className='btn'; viewBtn.textContent='View'; viewBtn.onclick=()=>{ showJoke(j); if(options && options.close) options.close(); };
       const favBtn = document.createElement('button'); favBtn.className='btn'; favBtn.textContent=isFavorite(j.id)?'Unfavorite':'Favorite'; favBtn.onclick=()=>{ toggleFavorite(j.id); favBtn.textContent=isFavorite(j.id)?'Unfavorite':'Favorite'; };
@@ -222,7 +255,7 @@
   }
   async function shareCurrent(){
     if(!state.current) return;
-    const text = state.current.text + '\n— via Family-Friendly Joke Generator';
+    const text = state.current.setup + '\n' + state.current.punchline + '\n— via Family-Friendly Joke Generator';
     const url = location.origin + location.pathname + `?j=${encodeURIComponent(state.current.id)}&kid=${state.kidMode?1:0}`;
     if(navigator.share){
       try{ await navigator.share({ title: 'A Joke For You', text, url }); return }catch(e){ /* fallthrough */ }
@@ -232,7 +265,8 @@
   async function copyCurrent(){
     if(!state.current) return;
     playSound('copy');
-    try{ await navigator.clipboard.writeText(state.current.text); toast('Joke copied!'); }catch{ toast('Copy failed — select and copy manually.'); }
+    const fullText = state.current.setup + '\n' + state.current.punchline;
+    try{ await navigator.clipboard.writeText(fullText); toast('Joke copied!'); }catch{ toast('Copy failed — select and copy manually.'); }
   }
   function toast(msg){
     const t = document.createElement('div');
@@ -247,6 +281,7 @@
 
   // Wire events
   els.newJokeBtn.addEventListener('click', newJoke);
+  els.revealBtn.addEventListener('click', revealAnswer);
   els.favoriteBtn.addEventListener('click', ()=>{ if(state.current) toggleFavorite(state.current.id) });
   els.shareBtn.addEventListener('click', shareCurrent);
   els.copyBtn.addEventListener('click', copyCurrent);
@@ -259,6 +294,8 @@
   els.kidModeToggle.addEventListener('change', (e)=>{ setKidMode(!!e.target.checked); });
 
   // Init
+  console.log('Initializing joke generator...');
+  console.log('Total jokes:', jokes.length);
   setKidMode(state.kidMode);
   // Load from URL if present
   const params = new URLSearchParams(location.search);
@@ -266,6 +303,13 @@
   const kid = params.get('kid');
   if(kid!==null){ setKidMode(kid==='1' || kid==='true'); }
   const byId = id && jokes.find(j=>j.id===id);
-  if(byId){ showJoke(byId); }
-  else { newJoke(); }
+  if(byId){ 
+    console.log('Loading joke from URL:', byId);
+    showJoke(byId); 
+  }
+  else { 
+    console.log('Loading random joke');
+    newJoke(); 
+  }
+  console.log('Joke generator initialized');
 })();
