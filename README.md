@@ -65,3 +65,4 @@ License
 -------
 
 For evaluation and internal use.
+link to page: https://taynazdev.github.io/Joke-generator/
