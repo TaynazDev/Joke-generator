@@ -1,4 +1,20 @@
 (function(){
+  // Preload A-Team theme sound
+  const aTeamTheme = new Audio('the-a-team-2010-theme-from-the-a-team1.wav');
+  aTeamTheme.preload = 'auto';
+  
+  // Preload pity the fool sound
+  const pitySound = new Audio('pitythefool.mp3');
+  pitySound.preload = 'auto';
+  
+  // Preload plan sound
+  const planSound = new Audio('plan.mp3');
+  planSound.preload = 'auto';
+  
+  // Preload pistol shot sound
+  const pistolShot = new Audio('pistol-shot.mp3');
+  pistolShot.preload = 'auto';
+  
   // Sound effects (using Web Audio API for beeps and boops)
   let audioCtx = null;
   function getAudioContext() {
@@ -72,7 +88,7 @@
     canvas.height = window.innerHeight;
 
     const particles = [];
-    const colors = ['#22c55e', '#a855f7', '#ec4899', '#f97316', '#06b6d4', '#eab308'];
+    const colors = ['#dc2626', '#2c3e50', '#f5f5f5', '#991b1b', '#0a0a0a'];
     
     for(let i = 0; i < 150; i++) {
       particles.push({
@@ -114,18 +130,26 @@
   }
 
   const jokes = [
-    { id: 'j1', setup: "Why did the teddy bear say no to dessert?", punchline: "Because she was stuffed.", kidSafe: true, tags: ['animals'] },
-    { id: 'j2', setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese.", kidSafe: true, tags: ['food'] },
-    { id: 'j3', setup: "Why did the student eat his homework?", punchline: "Because the teacher said it was a piece of cake!", kidSafe: true, tags: ['school','food'] },
-    { id: 'j4', setup: "How does a penguin build its house?", punchline: "Igloos it together.", kidSafe: true, tags: ['animals'] },
-    { id: 'j5', setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field.", kidSafe: true, tags: ['farm'] },
-    { id: 'j6', setup: "I told my computer I needed a break.", punchline: "It said 'No problem — I'll go to sleep.'", kidSafe: true, tags: ['tech'] },
-    { id: 'j7', setup: "Why don't eggs tell jokes?", punchline: "They'd crack each other up.", kidSafe: true, tags: ['food'] },
-    { id: 'j8', setup: "What do you call a boomerang that won't come back?", punchline: "A stick.", kidSafe: true, tags: ['random'] },
-    { id: 'j9', setup: "Why did the bicycle fall over?", punchline: "It was two-tired.", kidSafe: true, tags: ['vehicles'] },
-    { id: 'j10', setup: "Why did the math book look sad?", punchline: "It had too many problems.", kidSafe: true, tags: ['school'] },
-    { id: 'j11', setup: "What do you call a sleeping bull?", punchline: "A bulldozer.", kidSafe: true, tags: ['animals'] },
-    { id: 'j12', setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!", kidSafe: true, tags: ['animals','food'] },
+    { id: 'j1', setup: "Why did Hannibal always smile?", punchline: "Because he loved it when a plan comes together... even if it's just his grocery list!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j2', setup: "What does Mr. T eat for breakfast?", punchline: "He doesn't eat breakfast—breakfast pities the fool who tries to wake him up early!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j3', setup: "Why doesn't B.A. Baracus like to fly?", punchline: "Because even tough guys are allowed to have their ups and downs... mostly downs!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j4', setup: "Why was Face so good at disguises?", punchline: "Because he always put his best face forward!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j5', setup: "What's black, red, and can't stop moving?", punchline: "The A-Team van—it's got places to go and bad guys to catch!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j6', setup: "Why did Hannibal wear so many disguises?", punchline: "He wanted to keep his identity under wraps!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j7', setup: "How much does Mr. T's gold jewelry weigh?", punchline: "A ton of pity for anyone who tries to steal it!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j8', setup: "What's the A-Team's least favorite type of mission?", punchline: "Anything that requires B.A. to get on a plane—they have to plan around his plan to avoid the plan!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j9', setup: "Why is the A-Team so good at construction?", punchline: "Because they can build a tank out of spare parts in 20 minutes!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j10', setup: "Why did Mr. T refuse to drink the milk?", punchline: "He only drinks his milk when HE says so—he pities the cow who disagrees!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j11', setup: "Why does Hannibal always have a cigar?", punchline: "So he can say 'I love it when a plan comes together' with extra drama!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j12', setup: "Why is Murdock the best pilot?", punchline: "Because he's always flying high—even when he's on the ground!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j13', setup: "How does the A-Team always escape?", punchline: "They've got a van with a plan and a team that never says 'can't'!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j14', setup: "Why did Face always get them out of trouble?", punchline: "Because he knew how to face the facts and charm his way through!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j15', setup: "What's B.A.'s favorite room?", punchline: "The workshop—where he can wrench away his problems!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j16', setup: "Why can't the Military Police ever catch the A-Team?", punchline: "Because the A-Team is always one step ahead and two disguises better!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j17', setup: "Why does Murdock stay at the VA hospital?", punchline: "Free room service and the perfect alibi—plus the pudding cups!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j18', setup: "What's faster than a speeding bullet and painted red, black, and grey?", punchline: "The A-Team van when they're being chased by the MPs!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j19', setup: "What's Mr. T's golden rule?", punchline: "Treat others with respect... or prepare to be pitied!", kidSafe: true, tags: ['a-team'] },
+    { id: 'j20', setup: "Why does every A-Team mission succeed?", punchline: "Because with Hannibal's plans, Face's charm, B.A.'s muscles, and Murdock's flying—they're an A+ team!", kidSafe: true, tags: ['a-team'] },
   ];
 
   const els = {
@@ -135,12 +159,11 @@
     newJokeBtn: document.getElementById('newJokeBtn'),
     revealBtn: document.getElementById('revealBtn'),
     favoriteBtn: document.getElementById('favoriteBtn'),
+    dislikeBtn: document.getElementById('dislikeBtn'),
     shareBtn: document.getElementById('shareBtn'),
     copyBtn: document.getElementById('copyBtn'),
     historyBtn: document.getElementById('historyBtn'),
     favoritesBtn: document.getElementById('favoritesBtn'),
-    kidModeToggle: document.getElementById('kidModeToggle'),
-    kidModeLabel: document.getElementById('kidModeLabel'),
     historyDialog: document.getElementById('historyDialog'),
     favoritesDialog: document.getElementById('favoritesDialog'),
     historyList: document.getElementById('historyList'),
@@ -161,24 +184,50 @@
   let state = {
     current: null,
     revealed: false,
-    kidMode: !!storage.get('kidMode', false),
     history: storage.get('jokeHistory', []),
     favorites: storage.get('jokeFavorites', []),
+    dislikes: storage.get('jokeDislikes', []),
   };
 
   function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)] }
-  function getPool(){ return state.kidMode ? jokes.filter(j=>j.kidSafe) : jokes }
-  function setKidMode(on){ state.kidMode = !!on; storage.set('kidMode', state.kidMode); els.kidModeToggle.checked = state.kidMode; els.kidModeLabel.textContent = `Kid Mode: ${state.kidMode? 'On':'Off'}` }
   function isFavorite(id){ return state.favorites.includes(id) }
+  function isDisliked(id){ return state.dislikes.includes(id) }
   function toggleFavorite(id){
     const idx = state.favorites.indexOf(id);
     const isAdding = idx < 0;
     if(idx>=0) state.favorites.splice(idx,1); else state.favorites.push(id);
+    // Remove from dislikes if favoriting
+    if(isAdding) {
+      const disIdx = state.dislikes.indexOf(id);
+      if(disIdx>=0) state.dislikes.splice(disIdx,1);
+      storage.set('jokeDislikes', state.dislikes);
+    }
     storage.set('jokeFavorites', state.favorites);
     updateFavoriteBtn();
+    updateDislikeBtn();
     if(isAdding) {
-      playSound('favorite');
+      planSound.currentTime = 0;
+      planSound.play().catch(e => console.log('Audio play failed:', e));
       createConfetti();
+    }
+  }
+  function toggleDislike(id){
+    const idx = state.dislikes.indexOf(id);
+    const isAdding = idx < 0;
+    if(idx>=0) state.dislikes.splice(idx,1); else {
+      state.dislikes.push(id);
+      // Remove from favorites if disliking
+      const favIdx = state.favorites.indexOf(id);
+      if(favIdx>=0) state.favorites.splice(favIdx,1);
+      storage.set('jokeFavorites', state.favorites);
+    }
+    storage.set('jokeDislikes', state.dislikes);
+    updateFavoriteBtn();
+    updateDislikeBtn();
+    if(isAdding) {
+      // Play pity the fool sound
+      pitySound.currentTime = 0;
+      pitySound.play().catch(e => console.log('Audio play failed:', e));
     }
   }
   function updateFavoriteBtn(){
@@ -186,6 +235,12 @@
     const on = isFavorite(state.current.id);
     els.favoriteBtn.textContent = on ? '★ Favorited' : '♡ Favorite';
     els.favoriteBtn.setAttribute('aria-pressed', String(on));
+  }
+  function updateDislikeBtn(){
+    if(!state.current) return;
+    const on = isDisliked(state.current.id);
+    els.dislikeBtn.textContent = on ? '👎 Disliked' : '👎 Dislike';
+    els.dislikeBtn.setAttribute('aria-pressed', String(on));
   }
   function showJoke(j){
     console.log('showJoke called with:', j);
@@ -209,6 +264,7 @@
       storage.set('jokeHistory', state.history);
     }
     updateFavoriteBtn();
+    updateDislikeBtn();
   }
   function revealAnswer(){
     if(state.revealed || !state.current) return;
@@ -216,18 +272,20 @@
     els.jokeAnswer.classList.add('revealed');
     els.revealBtn.textContent = '✓ Revealed';
     els.revealBtn.disabled = true;
-    playSound('copy'); // Use copy sound for reveal
+    // Play A-Team theme sound
+    aTeamTheme.currentTime = 0;
+    aTeamTheme.play().catch(e => console.log('Audio play failed:', e));
   }
 
   function newJoke(){
-    playSound('newJoke');
-    const pool = getPool();
-    if(pool.length===0){ els.jokeText.textContent = 'No jokes available for this mode.'; return; }
-    let next = pickRandom(pool);
+    pistolShot.currentTime = 0;
+    pistolShot.play().catch(e => console.log('Audio play failed:', e));
+    if(jokes.length===0){ els.jokeText.textContent = 'No jokes available.'; return; }
+    let next = pickRandom(jokes);;
     // avoid immediate repeat
-    if(state.current && pool.length>1){
+    if(state.current && jokes.length>1){
       let attempts = 0;
-      while(next.id===state.current.id && attempts<5){ next = pickRandom(pool); attempts++; }
+      while(next.id===state.current.id && attempts<5){ next = pickRandom(jokes); attempts++; }
     }
     showJoke(next);
   }
@@ -255,8 +313,8 @@
   }
   async function shareCurrent(){
     if(!state.current) return;
-    const text = state.current.setup + '\n' + state.current.punchline + '\n— via Family-Friendly Joke Generator';
-    const url = location.origin + location.pathname + `?j=${encodeURIComponent(state.current.id)}&kid=${state.kidMode?1:0}`;
+    const text = state.current.setup + '\n' + state.current.punchline + '\n— via A-Team Joke Generator';
+    const url = location.origin + location.pathname + `?j=${encodeURIComponent(state.current.id)}`;
     if(navigator.share){
       try{ await navigator.share({ title: 'A Joke For You', text, url }); return }catch(e){ /* fallthrough */ }
     }
@@ -283,6 +341,7 @@
   els.newJokeBtn.addEventListener('click', newJoke);
   els.revealBtn.addEventListener('click', revealAnswer);
   els.favoriteBtn.addEventListener('click', ()=>{ if(state.current) toggleFavorite(state.current.id) });
+  els.dislikeBtn.addEventListener('click', ()=>{ if(state.current) toggleDislike(state.current.id) });
   els.shareBtn.addEventListener('click', shareCurrent);
   els.copyBtn.addEventListener('click', copyCurrent);
   els.historyBtn.addEventListener('click', ()=>{ renderList(els.historyList, state.history, { close: ()=>closeDialog(els.historyDialog) }); openDialog(els.historyDialog); });
@@ -291,17 +350,13 @@
   els.clearFavoritesBtn.addEventListener('click', ()=>{ state.favorites=[]; storage.set('jokeFavorites', state.favorites); renderList(els.favoritesList, state.favorites, { close: ()=>closeDialog(els.favoritesDialog) }); updateFavoriteBtn(); });
   els.closeHistoryBtn.addEventListener('click', ()=> closeDialog(els.historyDialog));
   els.closeFavoritesBtn.addEventListener('click', ()=> closeDialog(els.favoritesDialog));
-  els.kidModeToggle.addEventListener('change', (e)=>{ setKidMode(!!e.target.checked); });
 
   // Init
   console.log('Initializing joke generator...');
   console.log('Total jokes:', jokes.length);
-  setKidMode(state.kidMode);
   // Load from URL if present
   const params = new URLSearchParams(location.search);
   const id = params.get('j');
-  const kid = params.get('kid');
-  if(kid!==null){ setKidMode(kid==='1' || kid==='true'); }
   const byId = id && jokes.find(j=>j.id===id);
   if(byId){ 
     console.log('Loading joke from URL:', byId);

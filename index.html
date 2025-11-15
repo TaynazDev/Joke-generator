@@ -3,23 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Family-Friendly Joke Generator</title>
-    <meta name="description" content="A safe, family-friendly joke generator with favorites, history, and kid mode." />
+    <title>A-Team Joke Generator</title>
+    <meta name="description" content="A safe, family-friendly A-Team joke generator with favorites, history, and reveal answers." />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="app-header">
-      <h1 aria-label="Family Friendly Joke Generator">Family-Friendly Joke Generator</h1>
-      <div class="toggles">
-        <label class="switch" aria-label="Toggle Kid Friendly Mode">
-          <input type="checkbox" id="kidModeToggle" />
-          <span class="slider"></span>
-        </label>
-        <span class="toggle-label" id="kidModeLabel">Kid Mode: Off</span>
-      </div>
+      <h1 aria-label="A-Team Joke Generator">A-Team Joke Generator</h1>
     </header>
 
     <main class="container" role="main">
+      <img src="a-team.png" alt="A-Team Logo" class="logo" />
       <section class="joke-card" aria-live="polite" aria-atomic="true">
         <div id="jokeText" class="joke-text">Click "New Joke" to start!</div>
         <div id="jokeAnswer" class="joke-answer"></div>
@@ -29,13 +23,12 @@
         <button id="newJokeBtn" class="btn primary" aria-label="Get a new joke">New Joke</button>
         <button id="revealBtn" class="btn secondary" aria-label="Reveal the answer">🎭 Reveal Answer</button>
         <button id="favoriteBtn" class="btn" aria-label="Add or remove favorite">♡ Favorite</button>
+        <button id="dislikeBtn" class="btn" aria-label="Dislike this joke">👎 Dislike</button>
         <button id="shareBtn" class="btn" aria-label="Share this joke">Share</button>
         <button id="copyBtn" class="btn" aria-label="Copy this joke">Copy</button>
         <button id="historyBtn" class="btn" aria-label="View joke history">History</button>
         <button id="favoritesBtn" class="btn" aria-label="View favorites">Favorites</button>
       </div>
-
-      <p class="hint">Tip: Use Kid Mode to keep jokes extra gentle.</p>
     </main>
 
     <dialog id="historyDialog" class="dialog">
