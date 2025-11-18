@@ -2,6 +2,23 @@
 
 All notable changes to the A-Team Joke Generator will be documented in this file.
 
+## [1.1.0] - 2025-11-18
+
+### Added
+- Dislikes dialog to view all disliked jokes
+- Undislike button in dislikes menu to remove jokes from dislike list
+- Angry emoji explosion effect when disliking (👎😠😡💢)
+- Dislikes button in main actions area
+- Filtering system to exclude disliked jokes from random selection
+
+### Changed
+- Confetti now falls from top of page instead of appearing randomly
+- Improved confetti animation with better starting positions and speeds
+- Reveal Answer button emoji changed from 🎭 to 🤔
+
+### Fixed
+- Confetti z-index increased to ensure visibility above all elements
+
 ## [1.0.0] - 2025-11-15
 
 ### Added
