@@ -82,6 +82,13 @@
   function createConfetti() {
     const canvas = document.createElement('canvas');
     canvas.className = 'confetti-canvas';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '999999';
     document.body.appendChild(canvas);
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -93,10 +100,10 @@
     for(let i = 0; i < 150; i++) {
       particles.push({
         x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height - canvas.height,
+        y: -Math.random() * 500 - 100,
         size: Math.random() * 8 + 4,
         speedX: Math.random() * 3 - 1.5,
-        speedY: Math.random() * 3 + 2,
+        speedY: Math.random() * 5 + 3,
         color: colors[Math.floor(Math.random() * colors.length)],
         rotation: Math.random() * 360,
         rotationSpeed: Math.random() * 10 - 5
