@@ -136,6 +136,74 @@
     animate();
   }
 
+  // Thumbs down emoji explosion
+  function createThumbsDownExplosion() {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'explosion-canvas';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '999999';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const particles = [];
+    const emojis = ['👎', '😠', '😡', '💢'];
+    
+    for(let i = 0; i < 40; i++) {
+      const angle = (Math.PI * 2 * i) / 40;
+      const speed = Math.random() * 8 + 5;
+      particles.push({
+        x: centerX,
+        y: centerY,
+        speedX: Math.cos(angle) * speed,
+        speedY: Math.sin(angle) * speed,
+        size: Math.random() * 30 + 30,
+        opacity: 1,
+        rotation: Math.random() * 360,
+        rotationSpeed: Math.random() * 20 - 10,
+        emoji: emojis[Math.floor(Math.random() * emojis.length)]
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let active = false;
+
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.speedY += 0.3; // gravity
+        p.opacity -= 0.015;
+        p.rotation += p.rotationSpeed;
+        
+        if(p.opacity > 0) {
+          active = true;
+          ctx.save();
+          ctx.globalAlpha = p.opacity;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation * Math.PI / 180);
+          ctx.font = `${p.size}px Arial`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(p.emoji, 0, 0);
+          ctx.restore();
+        }
+      });
+
+      if(active) requestAnimationFrame(animate);
+      else canvas.remove();
+    }
+    animate();
+  }
+
   const jokes = [
     { id: 'j1', setup: "Why did Hannibal always smile?", punchline: "Because he loved it when a plan comes together... even if it's just his grocery list!", kidSafe: true, tags: ['a-team'] },
     { id: 'j2', setup: "What does Mr. T eat for breakfast?", punchline: "He doesn't eat breakfast—breakfast pities the fool who tries to wake him up early!", kidSafe: true, tags: ['a-team'] },
@@ -173,12 +241,17 @@
     favoritesBtn: document.getElementById('favoritesBtn'),
     historyDialog: document.getElementById('historyDialog'),
     favoritesDialog: document.getElementById('favoritesDialog'),
+    dislikesDialog: document.getElementById('dislikesDialog'),
     historyList: document.getElementById('historyList'),
     favoritesList: document.getElementById('favoritesList'),
+    dislikesList: document.getElementById('dislikesList'),
     clearHistoryBtn: document.getElementById('clearHistoryBtn'),
     closeHistoryBtn: document.getElementById('closeHistoryBtn'),
     clearFavoritesBtn: document.getElementById('clearFavoritesBtn'),
     closeFavoritesBtn: document.getElementById('closeFavoritesBtn'),
+    dislikesBtn: document.getElementById('dislikesBtn'),
+    clearDislikesBtn: document.getElementById('clearDislikesBtn'),
+    closeDislikesBtn: document.getElementById('closeDislikesBtn'),
   };
 
   const storage = {
@@ -235,6 +308,7 @@
       // Play pity the fool sound
       pitySound.currentTime = 0;
       pitySound.play().catch(e => console.log('Audio play failed:', e));
+      createThumbsDownExplosion();
     }
   }
   function updateFavoriteBtn(){
@@ -261,7 +335,7 @@
     console.log('Setup text set to:', els.jokeText.textContent);
     console.log('jokeText element:', els.jokeText);
     els.jokeAnswer.classList.remove('revealed');
-    els.revealBtn.textContent = '🎭 Reveal Answer';
+    els.revealBtn.textContent = '🤔 Reveal Answer';
     els.revealBtn.disabled = false;
     // add to history (dedupe consecutive)
     if(!state.history.length || state.history[state.history.length-1] !== j.id){
@@ -288,11 +362,14 @@
     pistolShot.currentTime = 0;
     pistolShot.play().catch(e => console.log('Audio play failed:', e));
     if(jokes.length===0){ els.jokeText.textContent = 'No jokes available.'; return; }
-    let next = pickRandom(jokes);;
+    // Filter out disliked jokes
+    const availableJokes = jokes.filter(j => !state.dislikes.includes(j.id));
+    if(availableJokes.length === 0){ els.jokeText.textContent = 'All jokes have been disliked! Clear dislikes to see more.'; return; }
+    let next = pickRandom(availableJokes);
     // avoid immediate repeat
-    if(state.current && jokes.length>1){
+    if(state.current && availableJokes.length>1){
       let attempts = 0;
-      while(next.id===state.current.id && attempts<5){ next = pickRandom(jokes); attempts++; }
+      while(next.id===state.current.id && attempts<5){ next = pickRandom(availableJokes); attempts++; }
     }
     showJoke(next);
   }
@@ -314,6 +391,11 @@
       const viewBtn = document.createElement('button'); viewBtn.className='btn'; viewBtn.textContent='View'; viewBtn.onclick=()=>{ showJoke(j); if(options && options.close) options.close(); };
       const favBtn = document.createElement('button'); favBtn.className='btn'; favBtn.textContent=isFavorite(j.id)?'Unfavorite':'Favorite'; favBtn.onclick=()=>{ toggleFavorite(j.id); favBtn.textContent=isFavorite(j.id)?'Unfavorite':'Favorite'; };
       actions.append(viewBtn, favBtn);
+      // Add undislike button for dislikes list
+      if(options && options.isDislikes){
+        const undislikeBtn = document.createElement('button'); undislikeBtn.className='btn'; undislikeBtn.textContent='Undislike'; undislikeBtn.onclick=()=>{ toggleDislike(j.id); row.remove(); if(state.dislikes.length === 0) renderList(container, state.dislikes, options); };
+        actions.appendChild(undislikeBtn);
+      }
       row.append(text, actions);
       container.appendChild(row);
     });
@@ -353,10 +435,13 @@
   els.copyBtn.addEventListener('click', copyCurrent);
   els.historyBtn.addEventListener('click', ()=>{ renderList(els.historyList, state.history, { close: ()=>closeDialog(els.historyDialog) }); openDialog(els.historyDialog); });
   els.favoritesBtn.addEventListener('click', ()=>{ renderList(els.favoritesList, state.favorites, { close: ()=>closeDialog(els.favoritesDialog) }); openDialog(els.favoritesDialog); });
+  els.dislikesBtn.addEventListener('click', ()=>{ renderList(els.dislikesList, state.dislikes, { close: ()=>closeDialog(els.dislikesDialog), isDislikes: true }); openDialog(els.dislikesDialog); });
   els.clearHistoryBtn.addEventListener('click', ()=>{ state.history=[]; storage.set('jokeHistory', state.history); renderList(els.historyList, state.history, { close: ()=>closeDialog(els.historyDialog) });});
   els.clearFavoritesBtn.addEventListener('click', ()=>{ state.favorites=[]; storage.set('jokeFavorites', state.favorites); renderList(els.favoritesList, state.favorites, { close: ()=>closeDialog(els.favoritesDialog) }); updateFavoriteBtn(); });
+  els.clearDislikesBtn.addEventListener('click', ()=>{ state.dislikes=[]; storage.set('jokeDislikes', state.dislikes); renderList(els.dislikesList, state.dislikes, { close: ()=>closeDialog(els.dislikesDialog) }); updateDislikeBtn(); });
   els.closeHistoryBtn.addEventListener('click', ()=> closeDialog(els.historyDialog));
   els.closeFavoritesBtn.addEventListener('click', ()=> closeDialog(els.favoritesDialog));
+  els.closeDislikesBtn.addEventListener('click', ()=> closeDialog(els.dislikesDialog));
 
   // Init
   console.log('Initializing joke generator...');
